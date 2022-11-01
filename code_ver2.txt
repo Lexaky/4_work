@@ -1,0 +1,153 @@
+#include <iostream>
+
+/*
+Определить свою структуру данных, которая хранит числа + еще что-нибудь (число + название?)
+Через перегрузку реализовать над структурой побитовые операции ( + будет побитовым "или", * побитовым "и" и тд)
+И вывод в консольку красивый отформатированный через printf для этой структуры :)
+*/
+
+class Point
+{
+private:
+    int x = 0, y = 0; // coordinates
+    char name;
+public:
+
+    Point()
+    {
+        x = 0; y = 0;
+        name = '0';
+    }
+    Point(int x, int y)
+    {
+        this->x = x;
+        this->y = y;
+        name = '0';
+    }
+    Point (int x, int y, char name)
+    {
+        this->x = x;
+        this->y = y;
+        this->name = name;
+    }
+    int getX()
+    {
+        return x;
+    }
+    int getY()
+    {
+        return y;
+    }
+    char getName()
+    {
+        return name;
+    }
+    void setName(char newName)
+    {
+        name = newName;
+    }
+    void setX(int newX)
+    {
+        x = newX;
+    }
+    void setY(int newY)
+    {
+        y = newY;
+    }
+};
+
+Point operator + (Point p1, Point p2)
+{ return Point(p1.getX() + p2.getX(), p1.getY() + p2.getY(), p1.getName()); } //Складывает координаты p1, p2; Имя первого параметра
+
+Point operator * (Point p1, Point p2)
+{ return Point(p1.getX() * p2.getX(), p1.getY() * p2.getY(), p1.getName()); } //Умножает координаты p1, p2; Имя первого параметра
+
+Point operator - (Point p1, Point p2)
+{ return Point(p1.getX() - p2.getX(), p1.getY() - p2.getY(), p1.getName()); } //Вычитает координаты точки p2 из координат точки p1
+
+Point operator / (Point p1, Point p2)
+{ return Point(p1.getX() / p2.getX(), p1.getY() / p2.getY(), p1.getName()); } //Делит координаты точки p1 на координаты точки p2
+
+Point operator ! (Point p1)
+{ return Point(~p1.getX(), ~p1.getY(), p1.getName()); } // Побитовая инверсия
+
+/*
+p1: name; coordinates (x1, y1)
+p2: name; coordiantes (x2, y2);
+*/
+
+bool operator < (Point p1, Point p2)
+//Находится ли точка p2 правее или выше точки p1 в декартовой системе координат
+{
+    if (p1.getX() < p2.getX() && p1.getY() < p2.getY()) return true;
+        else return false;
+}
+
+bool operator > (Point p1, Point p2)
+//Находится ли точка p2 левее или выше точки p1 в декартовой системе координат
+{ if (p1.getX() > p2.getX() && p1.getY() > p2.getY()) return true;
+        else return false; }
+
+Point operator ^ (Point p1, Point p2)
+//Вычисление среднего расстояния между точками p1 и p2 (В целых значениях с округлением в меньшую сторону)
+{ return Point((p1.getX() + p2.getX())/2, (p1.getY() + p2.getY())/2, p1.getName()); }
+
+using namespace std;
+
+void printPoint(Point p)
+{ //Вывод данных о точке p: Название точки, координаты
+ // cout << "(*)" << p.getName() <<  " (" << p.getX() << "; " << p.getY() << ") " << endl;
+  printf("(*)%.4c (%.4d; %.4d) \n", p.getName(), p.getX(), p.getY());
+}
+
+int main()
+{
+    setlocale(LC_ALL, "rus");
+
+    Point* newP1 = new Point(5, 12, 'A');
+    Point* newP2 = new Point(8, 5, 'B');
+    Point newP3 = *newP1 + *newP2;
+
+    newP3.setName('C');
+
+    printPoint(*newP1);
+    printPoint(*newP2);
+    printPoint(newP3);
+
+
+    newP3 = *newP1 * *newP2;
+    newP3.setName('C');
+    printPoint(newP3);
+
+    newP3 = !newP3;
+    newP3.setName('C');
+    printPoint(newP3);
+
+
+    newP3 = *newP1 + *newP2;
+    newP3.setName('C');
+    printPoint(newP3);
+
+
+    ///////////////////////////////////////////////////////////
+    cout << "\n\nПример форматированного вывода: " << endl;
+    newP3 = *newP1 * *newP2;
+    newP3.setName('C');
+    printPoint(newP3);
+    newP3 = !newP3;
+    newP3.setName('C');
+    printPoint(newP3);
+    newP3 = *newP1 + *newP2;
+    newP3.setName('C');
+    printPoint(newP3);
+    cout << "p1 < p2? " << (*newP1 < *newP2) << endl;
+    //newP3.setName('C');
+    //printPoint(newP3);
+    cout << "p1 > p2? " << (*newP1 > *newP2) << endl;
+    //newP3.setName('C');
+    //printPoint(newP3);
+    newP3 = *newP1 ^ *newP2;
+    newP3.setName('C');
+    printPoint(newP3);
+    return 0;
+}
