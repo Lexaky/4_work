@@ -5,88 +5,88 @@
 Через перегрузку реализовать над структурой побитовые операции ( + будет побитовым "или", * побитовым "и" и тд)
 И вывод в консольку красивый отформатированный через printf для этой структуры :)
 */
-
+/*
+21-25 прототипы конструкторов
+27-46 перегрузка операторов
+48-55 прототипы методов
+58-70 описание прототипов конструкторов
+72-85 описание прототипов методов
+*/
 class Point
 {
 private:
-    int x = 0, y = 0; // coordinates
-    char name;
+    int x = 0, y = 0; // Координаты точки
+    char name; //Имя точки
 public:
+    //Перегруженные прототипы конструктора
+    Point();
+    Point(int x, int y);
+    Point (int x, int y, char name);
+    //Перегруженные прототипы конструктора
 
-    Point()
-    {
-        x = 0; y = 0;
-        name = '0';
-    }
-    Point(int x, int y)
-    {
-        this->x = x;
-        this->y = y;
-        name = '0';
-    }
-    Point (int x, int y, char name)
-    {
-        this->x = x;
-        this->y = y;
-        this->name = name;
-    }
-    int getX()
-    {
-        return x;
-    }
-    int getY()
-    {
-        return y;
-    }
-    char getName()
-    {
-        return name;
-    }
-    void setName(char newName)
-    {
-        name = newName;
-    }
-    void setX(int newX)
-    {
-        x = newX;
-    }
-    void setY(int newY)
-    {
-        y = newY;
-    }
+    //Перегрузка операторов
+    Point operator + (Point p)
+        { return Point(p.getX() + this->getX(), p.getY() + this->getY(), this->getName()); } //Складывает координаты точки p и координаты другой точки
+    Point operator * (Point p)
+        { return Point(p.getX() * this->getX(), p.getY() * this->getY(), this->getName()); } //Умножает координаты точки p на координаты другой точки
+    Point operator - (Point p)
+        { return Point(p.getX() - this->getX(), p.getY() - this->getY(), this->getName()); } //Вычитает координаты точки p из координаты другой точки
+    Point operator / (Point p)
+        { return Point(p.getX() / this->getX(), p.getY() / this->getY(), this->getName()); } //Делит координаты точки p на координаты другой точки
+    Point operator ! ()
+        { return Point(!this->getX(), ~this->getY(), this->getName()); } // Побитовая инверсия данной точки
+    bool operator < (Point p) //Находится ли точка p правее или выше сравниваемой точки в декартовой системе координат
+        { if (p.getX() < this->getX() && p.getY() < p.getY()) return true;
+        else return false; }
+    bool operator > (Point p) //Находится ли точка p левее или выше сравниваемой точки в декартовой системе координат
+        { if (p.getX() > this->getX() && p.getY() > p.getY()) return true;
+            else return false; }
+    Point operator ^ (Point p) //Вычисление среднего расстояния между точками p и данной точки (В целых значениях с округлением в меньшую сторону)
+        { return Point((p.getX() + this->getX())/2, (p.getY() + this->getY())/2, this->getName()); }
+    //Конец перегрузки операторов
+
+    //Описание методов
+    int getX();
+    int getY();
+    char getName();
+    void setName(char newName);
+    void setX(int newX);
+    void setY(int newY);
+    //Конец описания методов
 };
 
-Point operator + (Point p1, Point p2)
-{ return Point(p1.getX() | p2.getX(), p1.getY() | p2.getY(), p1.getName()); } //Побитово складывает координаты p1, p2; Имя первого параметра
+//Описание прототипов конструкторов
+Point::Point()
+    {   x = 0; y = 0;
+        name = '0'; }
+Point::Point (int x, int y, char name)
+    {   this->x = x;
+        this->y = y;
+        this->name = name; }
+Point::Point(int x, int y)
+    {   this->x = x;
+        this->y = y;
+        name = '0'; }
+//Конец описания прототипов конструкторов
 
-Point operator * (Point p1, Point p2)
-{ return Point(p1.getX() & p2.getX(), p1.getY() & p2.getY(), p1.getName()); } //Побитово умножает координаты p1, p2; Имя первого параметра
+//Реализация прототипов методов
+int Point::getX()
+    { return (this->x); }
+int Point::getY()
+    { return y; }
+char Point::getName()
+    { return this->name; }
+void Point::setName(char newName)
+    { name = newName; }
+void Point::setX(int newX)
+    { x = newX; }
+void Point::setY(int newY)
+    { y = newY; }
+//Конец реализации методов
 
-Point operator ! (Point p1)
-{ return Point(~p1.getX(), ~p1.getY(), p1.getName()); } // Побитовая инверсия
-
-/*
-p1: name; coordinates (x1, y1)
-p2: name; coordiantes (x2, y2);
-*/
-
-Point operator < (Point p1, Point p2)
-//Поразрядный сдвиг влево координаты x1 на x2 бит влево, координаты y1 на y2 бит влево
-{ return Point(p1.getX() << p2.getX(), p1.getY() << p2.getY(), p1.getName()); }
-
-Point operator > (Point p1, Point p2)
-//Поразрядный сдвиг влево координаты x1 на x2 бит вправо, координаты y1 на y2 бит вправо
-{ return Point(p1.getX() >> p2.getX(), p1.getY() >> p2.getY(), p1.getName()); }
-
-Point operator ^ (Point p1, Point p2)
-//Исключающее ИЛИ координат x1 и x2; y1 и y2
-{ return Point(p1.getX() ^ p2.getX(), p1.getY() ^ p2.getY(), p1.getName()); }
-
-using namespace std;
 
 void printPoint(Point p)
 { //Вывод данных о точке p: Название точки, координаты
- // cout << "(*)" << p.getName() <<  " (" << p.getX() << "; " << p.getY() << ") " << endl;
   printf("(*)%.4c (%.4d; %.4d) \n", p.getName(), p.getX(), p.getY());
 }
 
@@ -97,44 +97,29 @@ int main()
     Point* newP1 = new Point(5, 12, 'A');
     Point* newP2 = new Point(8, 5, 'B');
     Point newP3 = *newP1 + *newP2;
-
     newP3.setName('C');
 
     printPoint(*newP1);
     printPoint(*newP2);
     printPoint(newP3);
 
-    cout << "Побитовое И: ";
+
     newP3 = *newP1 * *newP2;
     newP3.setName('C');
     printPoint(newP3);
-    cout << "Побитовая инверсия: ";
+
     newP3 = !newP3;
     newP3.setName('C');
     printPoint(newP3);
 
-    cout << "Побитовое ИЛИ: ";
+
     newP3 = *newP1 + *newP2;
     newP3.setName('C');
     printPoint(newP3);
 
-    cout << "Побитовый сдвиг влево: ";
-    newP3 = *newP1 < *newP2;
-    newP3.setName('C');
-    printPoint(newP3);
-
-    cout << "Побитовый сдвиг вправо: ";
-    newP3 = *newP1 > *newP2;
-    newP3.setName('C');
-    printPoint(newP3);
-
-    cout << "Побитовый исключающее ИЛИ: ";
-    newP3 = *newP1 ^ *newP2;
-    newP3.setName('C');
-    printPoint(newP3);
 
     ///////////////////////////////////////////////////////////
-    cout << "\n\nПример форматированного вывода: " << endl;
+    std::cout << "\n\nПример форматированного вывода: \n";
     newP3 = *newP1 * *newP2;
     newP3.setName('C');
     printPoint(newP3);
@@ -144,12 +129,8 @@ int main()
     newP3 = *newP1 + *newP2;
     newP3.setName('C');
     printPoint(newP3);
-    newP3 = *newP1 < *newP2;
-    newP3.setName('C');
-    printPoint(newP3);
-    newP3 = *newP1 > *newP2;
-    newP3.setName('C');
-    printPoint(newP3);
+    std::cout << "p1 < p2? " << (*newP1 < *newP2) << std::endl;
+    std::cout << "p1 > p2? " << (*newP1 > *newP2) << std::endl;
     newP3 = *newP1 ^ *newP2;
     newP3.setName('C');
     printPoint(newP3);
