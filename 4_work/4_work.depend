@@ -1,4 +1,16 @@
 # depslib dependency file v1.0
-1667302253 source:a:\projectscodeblocks\4_work\main.cpp
+1667956215 source:a:\projectscodeblocks\4_work\main.cpp
+	"head.hpp"
+	"point.cpp"
 	<iostream>
+
+1667956566 source:a:\projectscodeblocks\4_work\point.cpp
+	"head.hpp"
+
+1667956594 a:\projectscodeblocks\4_work\head.hpp
+	<iostream>
+
+1667956237 a:\projectscodeblocks\4_work\point.cpp
+	<iostream>
+	"head.hpp"
 
